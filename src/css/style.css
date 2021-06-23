@@ -1,17 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Saira+Stencil+One&display=swap');
 * {
   box-sizing: border-box;
 }
 
-.container {
-  width: 100%;
-  height: 100vh;
-  background-color: #a328d6;
-  font-family: "Saira Stencil One", cursive;
-  font-size: 32px;
-  line-height: 50px;
-  color: #ffffff;
+body {
+  background-color: #9056BF ;
+
 }
+
+
 
 

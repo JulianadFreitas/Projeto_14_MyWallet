@@ -1,15 +1,25 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
-export default function Login() {
+export default function Register() {
     const [email, setEmail] =useState("");
     const [password, setPassword] =useState("");
-    console.log(email, password)
+    const [username, setUsername] =useState("");
+    console.log(email, password, username)
+    console.log(localStorage);
   return (
     <Container>
       <Box>
         <h1>MyWallet</h1>
         <Form>
+          <input
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            placeholder="Nome"
+            required
+          ></input>
+          
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -24,9 +34,16 @@ export default function Login() {
             placeholder="Senha"
             required
           ></input>
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            placeholder="Confirme a senha"
+            required
+          ></input>
         </Form>
-        <button>Entrar</button>
-       <p><Link to ="/register">Primeira vez? Cadastre-se!</Link> </p>
+        <button>Cadastrar</button>
+       <p> <Link to ="/">Já tem uma conta? Entre agora!</Link></p>
       </Box>
     </Container>
   );
@@ -64,7 +81,7 @@ const Box = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: #ffffff;
-    text-decoration: none;   }
+    text-decoration: none;  }
 
   button {
     height: 46px;

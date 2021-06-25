@@ -15,6 +15,7 @@ export default function Home() {
       <Header>
         Olá Fulano
         <ExportIcon />
+        
       </Header>
       <Box>
         <p>Não há registros de entrada ou saída</p>

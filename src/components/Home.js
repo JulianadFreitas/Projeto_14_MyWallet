@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../contexts/UserContext";
+import axios from "axios";
+
 import {
   AiOutlineExport,
   AiOutlinePlusCircle,
@@ -9,26 +12,39 @@ import {
 
 export default function Home() {
   let history = useHistory();
+  const { user } = useContext(UserContext);
+  const { token } = localStorage;
 
+  function LogOut() {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const request = axios.post("http://localhost:4000/home/signout", {}, config);
+    request.then(() => {
+      console.log(localStorage)
+      localStorage.removeItem("token");
+      console.log(localStorage)
+      history.push("/");
+    });
+  }
   return (
     <Container>
       <Header>
-        Olá Fulano
-        <ExportIcon />
-        
+        {`Olá,  ${user.username}`}
+        <ExportIcon onClick={LogOut} />
       </Header>
       <Box>
         <p>Não há registros de entrada ou saída</p>
       </Box>
       <Transactions>
-        <button onClick={() =>  history.push("/revenue")}>
+        <button onClick={() => history.push("/user/revenue")}>
           <IncreaseIcon />
-          <h2>Nova <br /> entrada
+          <h2>
+            Nova <br /> entrada
           </h2>
         </button>
-        <button onClick={() =>  history.push("/expense")}>
+        <button onClick={() => history.push("/user/expense")}>
           <DecreaseIcon />
-          <h2>Nova
+          <h2>
+            Nova
             <br /> saida
           </h2>
         </button>
@@ -109,7 +125,7 @@ const Transactions = styled.div`
     font-weight: bold;
     font-size: 17px;
     line-height: 20px;
-    border:none;
+    border: none;
   }
 `;
 const ExportIcon = styled(AiOutlineExport)`

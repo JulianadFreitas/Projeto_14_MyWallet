@@ -1,33 +1,39 @@
 import React from "react";
-import Login from "./Login";
-import Register from "./Register";
+import LogIn from "./LogIn";
+import SignUp from "./SignUp";
 import Home from "./Home";
 import Revenue from "./Revenue";
 import Expense from "./Expense";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
+import { useState } from "react";
 
 export default function App() {
+  const [user,setUser] = useState(undefined);
   return (
     <>
+    	<UserContext.Provider value={{user, setUser}}>
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>
-            <Login />
+            <LogIn />
           </Route>
-          <Route path="/register" exact>
-            <Register />
+          <Route path="/signup" exact>
+            <SignUp />
           </Route>
-          <Route path="/home" exact>
+          <Route path="/user/home" exact>
             <Home />
           </Route>
-          <Route path="/revenue" exact>
+          <Route path="/user/revenue" exact>
             <Revenue />
           </Route>
-          <Route path="/expense" exact>
+          <Route path="user/expense" exact>
             <Expense />
           </Route>
+          
         </Switch>
       </BrowserRouter>
+      </UserContext.Provider>
     </>
   );
 }

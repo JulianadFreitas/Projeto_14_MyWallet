@@ -1,20 +1,55 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, {useState, useContext} from "react";
+import {Link, useHistory} from "react-router-dom";
 import styled from "styled-components";
-export default function Login() {
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
+
+export default function LogIn() {
+  const { setUser } = useContext(UserContext);
     const [email, setEmail] =useState("");
     const [password, setPassword] =useState("");
-    console.log(email, password)
+    const [isDisabled, setIsDisabled] = useState(false);
+  
+    let history = useHistory();
+    console.log(email, password);
+
+    function SignIn(event){
+      event.preventDefault();
+      setIsDisabled(true);
+      const body = {
+        email,
+        password
+      }
+      const request = axios.post('http://localhost:4000/user/login', body);
+      request.then((response)=> {
+        setIsDisabled(false);
+        setUser(response.data);
+        localStorage.setItem("token",response.data.token);
+        history.push("/user/home");
+        console.log("ok", response.data)
+      });
+      request.catch((error)=> {
+        setIsDisabled(false);
+        console.log(error);
+        if(error.message === 'Request failed with status code 404') {
+          console.log(error.message)
+          alert("Usuário ou senha incorretos! Tente novamente.")
+          return;
+        }
+
+      })
+    }
   return (
     <Container>
       <Box>
         <h1>MyWallet</h1>
-        <Form>
+        <Form  onSubmit={SignIn}>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             placeholder="E-mail"
+            disabled={isDisabled}
             required
           ></input>
           <input
@@ -22,11 +57,12 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             placeholder="Senha"
+            disabled={isDisabled}
             required
           ></input>
+          <button type='submit' onClick={SignIn}>Entrar</button>
         </Form>
-        <button>Entrar</button>
-       <p><Link to ="/register">Primeira vez? Cadastre-se!</Link> </p>
+       <p><Link to ="/signup">Primeira vez? Cadastre-se!</Link> </p>
       </Box>
     </Container>
   );
@@ -66,6 +102,15 @@ const Box = styled.div`
     color: #ffffff;
     text-decoration: none;   }
 
+ 
+`;
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+   
   button {
     height: 46px;
     width: 100%;
@@ -79,14 +124,8 @@ const Box = styled.div`
     font-weight: bold;
     font-size: 20px;
     line-height: 23px;
+    cursor: pointer;
   }
-`;
-
-const Form = styled.form`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
 
   input {
     height: 58px;
@@ -100,6 +139,7 @@ const Form = styled.form`
     font-family: "Raleway", sans-serif;
     font-size: 20px;
     line-height: 23px;
+    text-decoration: none; 
 
     ::-webkit-input-placeholder {
       color: #000000;

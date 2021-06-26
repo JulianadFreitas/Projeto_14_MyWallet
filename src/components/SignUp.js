@@ -1,30 +1,59 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-export default function Register() {
-    const [email, setEmail] =useState("");
-    const [password, setPassword] =useState("");
-    const [username, setUsername] =useState("");
-    console.log(email, password, username)
-    console.log(localStorage);
+import axios from "axios";
+
+
+export default function SignUp() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  let history = useHistory();
+  console.log(email, password, username);
+
+  function SaveRegister(event) {
+    event.preventDefault();
+    if (username && email && password && confirmPassword) {
+      setIsDisabled(true);
+      const body = {
+        name: username,
+        email,
+        password,
+      };
+      const request = axios.post("http://localhost:4000/user/signup", body);
+      request.then(() => {
+        setIsDisabled(false);
+        alert("sucesso no cadastro!");
+        history.push("/");
+      });
+      request.catch(() => {
+      setIsDisabled(false);
+      alert("Preencha todos os campos")
+      }
+      );
+    }
+  }
   return (
     <Container>
       <Box>
         <h1>MyWallet</h1>
-        <Form>
+        <Form onSubmit={SaveRegister}>
           <input
             type="text"
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             placeholder="Nome"
+            disabled={isDisabled}
             required
           ></input>
-          
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             placeholder="E-mail"
+            disabled={isDisabled}
             required
           ></input>
           <input
@@ -32,18 +61,25 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             placeholder="Senha"
+            disabled={isDisabled}
             required
           ></input>
           <input
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
             placeholder="Confirme a senha"
+            disabled={isDisabled}
             required
           ></input>
+          <button type="submit" onClick={SaveRegister}>
+            Cadastrar
+          </button>
         </Form>
-        <button>Cadastrar</button>
-       <p> <Link to ="/">Já tem uma conta? Entre agora!</Link></p>
+        <p>
+          {" "}
+          <Link to="/">Já tem uma conta? Entre agora!</Link>
+        </p>
       </Box>
     </Container>
   );
@@ -81,7 +117,15 @@ const Box = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: #ffffff;
-    text-decoration: none;  }
+    text-decoration: none;
+  }
+`;
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 
   button {
     height: 46px;
@@ -96,15 +140,8 @@ const Box = styled.div`
     font-weight: bold;
     font-size: 20px;
     line-height: 23px;
+    cursor: pointer;
   }
-`;
-
-const Form = styled.form`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-
   input {
     height: 58px;
     background: #ffffff;

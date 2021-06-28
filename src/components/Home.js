@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import Transaction from "./Transaction";
 
@@ -13,7 +12,6 @@ import {
 
 export default function Home() {
   let history = useHistory();
-  const { user } = useContext(UserContext);
   const { token, name } = localStorage;
   const [registries, setRegistries] = useState([]);
 

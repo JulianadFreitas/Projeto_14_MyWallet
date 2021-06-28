@@ -1,18 +1,11 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
-import { useHistory, useLocation } from "react-router";
-import UserContext from "../contexts/UserContext";
-import axios from "axios";
 import dayjs from "dayjs";
 
 export default function Transaction(props) {
-  console.log(props.registries);
   const register = props.registries;
-  const total = props.total;
-  console.log(register.description, "oi", total);
   const valueEdit = ((register.value / 100) * 100).toFixed(2);
-  console.log(valueEdit.toString().replace(".", ","));
+
   return (
     <List>
       <Box>

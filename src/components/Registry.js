@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useHistory, useLocation } from "react-router";
-import UserContext from "../contexts/UserContext";
 import axios from "axios";
 
 export default function Registry() {
@@ -13,7 +11,6 @@ export default function Registry() {
   const location = useLocation();
   const path = location.pathname;
   const type = path.replace("/user/", "");
-  const { user } = useContext(UserContext);
   const { token } = localStorage;
 
   function newRegister(event) {

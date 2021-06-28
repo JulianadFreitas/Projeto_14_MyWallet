@@ -25,8 +25,9 @@ export default function LogIn() {
         setIsDisabled(false);
         setUser(response.data);
         localStorage.setItem("token",response.data.token);
+        localStorage.setItem("name",response.data.username);
         history.push("/user/home");
-        console.log("ok", response.data)
+        console.log("LOGIN", response.data)
       });
       request.catch((error)=> {
         setIsDisabled(false);

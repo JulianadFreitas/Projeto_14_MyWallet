@@ -2,8 +2,7 @@ import React from "react";
 import LogIn from "./LogIn";
 import SignUp from "./SignUp";
 import Home from "./Home";
-import Revenue from "./Revenue";
-import Expense from "./Expense";
+import Registry from "./Registry";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import { useState } from "react";
@@ -24,13 +23,12 @@ export default function App() {
           <Route path="/user/home" exact>
             <Home />
           </Route>
+          <Route path="/user/expense" exact>
+            <Registry />
+          </Route>
           <Route path="/user/revenue" exact>
-            <Revenue />
+            <Registry />
           </Route>
-          <Route path="user/expense" exact>
-            <Expense />
-          </Route>
-          
         </Switch>
       </BrowserRouter>
       </UserContext.Provider>

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Revenue() {
+export default function Teste() {
   return (
-    <Container>
+    <Container> oioioi
       <Header>Nova entrada</Header>
       <Form>
         <input

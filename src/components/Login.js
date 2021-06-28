@@ -1,50 +1,46 @@
-import React, {useState, useContext} from "react";
-import {Link, useHistory} from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
 export default function LogIn() {
   const { setUser } = useContext(UserContext);
-    const [email, setEmail] =useState("");
-    const [password, setPassword] =useState("");
-    const [isDisabled, setIsDisabled] = useState(false);
-  
-    let history = useHistory();
-    console.log(email, password);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
-    function SignIn(event){
-      event.preventDefault();
-      setIsDisabled(true);
-      const body = {
-        email,
-        password
+  let history = useHistory();
+
+  function SignIn(event) {
+    event.preventDefault();
+    setIsDisabled(true);
+    const body = {
+      email,
+      password,
+    };
+    const request = axios.post("http://localhost:4000/user/login", body);
+    request.then((response) => {
+      setIsDisabled(false);
+      setUser(response.data);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("name", response.data.username);
+      history.push("/user/home");
+    });
+
+    request.catch((error) => {
+      setIsDisabled(false);
+      if (error.message === "Request failed with status code 404") {
+        alert("Usuário ou senha incorretos! Tente novamente.");
+        return;
       }
-      const request = axios.post('http://localhost:4000/user/login', body);
-      request.then((response)=> {
-        setIsDisabled(false);
-        setUser(response.data);
-        localStorage.setItem("token",response.data.token);
-        localStorage.setItem("name",response.data.username);
-        history.push("/user/home");
-        console.log("LOGIN", response.data)
-      });
-      request.catch((error)=> {
-        setIsDisabled(false);
-        console.log(error);
-        if(error.message === 'Request failed with status code 404') {
-          console.log(error.message)
-          alert("Usuário ou senha incorretos! Tente novamente.")
-          return;
-        }
-
-      })
-    }
+    });
+  }
   return (
     <Container>
       <Box>
         <h1>MyWallet</h1>
-        <Form  onSubmit={SignIn}>
+        <Form onSubmit={SignIn}>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -61,9 +57,13 @@ export default function LogIn() {
             disabled={isDisabled}
             required
           ></input>
-          <button type='submit' onClick={SignIn}>Entrar</button>
+          <button type="submit" onClick={SignIn}>
+            Entrar
+          </button>
         </Form>
-       <p><Link to ="/signup">Primeira vez? Cadastre-se!</Link> </p>
+        <p>
+          <Link to="/signup">Primeira vez? Cadastre-se!</Link>{" "}
+        </p>
       </Box>
     </Container>
   );
@@ -101,9 +101,8 @@ const Box = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: #ffffff;
-    text-decoration: none;   }
-
- 
+    text-decoration: none;
+  }
 `;
 
 const Form = styled.form`
@@ -111,7 +110,7 @@ const Form = styled.form`
   display: flex;
   justify-content: center;
   flex-direction: column;
-   
+
   button {
     height: 46px;
     width: 100%;
@@ -140,7 +139,7 @@ const Form = styled.form`
     font-family: "Raleway", sans-serif;
     font-size: 20px;
     line-height: 23px;
-    text-decoration: none; 
+    text-decoration: none;
 
     ::-webkit-input-placeholder {
       color: #000000;

@@ -13,35 +13,42 @@ export default function Registry() {
   const location = useLocation();
   const path = location.pathname;
   const type = path.replace("/user/", "");
-  const {user} = useContext(UserContext);
-  const { token }  = localStorage;
-  console.log(token)
-function newRegister(event) {
-  event.preventDefault();
-  setIsDisabled(true);
-   const config = { 
-      headers: { Authorization: `Bearer ${token}` } };
-      const body = {
-        value, 
-        description, 
-        type
-    }
-  
-    const request = axios.post(`http://localhost:4000/home/registries`, body, config);
-    request.then(
-      ()=>{
-      console.log("oi");
-      history.push("/user/home");
+  const { user } = useContext(UserContext);
+  const { token } = localStorage;
 
+  function newRegister(event) {
+    event.preventDefault();
+    setIsDisabled(true);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const body = {
+      value,
+      description,
+      type,
+    };
+
+    const request = axios.post(
+      `http://localhost:4000/home/registries`,
+      body,
+      config
+    );
+    request.then(() => {
+      history.push("/user/home");
     });
-    request.catch((error)=>{
+    request.catch((error) => {
       setIsDisabled(false);
-      console.log(error, "erro");
+      if (error.message === "Request failed with status code 500") {
+        alert(
+          'Preencha os dados corretamente, não são permitidos letras ou caracteres especiais no campo "valor".'
+        );
+        return;
+      }
     });
   }
   return (
     <Container>
-      <Header>{type === "revenue" ? "Nova entrada": "Nova saída"}</Header>
+      <Header>{type === "revenue" ? "Nova entrada" : "Nova saída"}</Header>
       <Form onSubmit={newRegister}>
         <input
           type="text"
@@ -61,7 +68,9 @@ function newRegister(event) {
           disabled={isDisabled}
           required
         ></input>
-        <button onClick={newRegister}>{type === "revenue" ? "Salvar entrada": "Salvar saída"}</button>
+        <button onClick={newRegister}>
+          {type === "revenue" ? "Salvar entrada" : "Salvar saída"}
+        </button>
       </Form>
     </Container>
   );

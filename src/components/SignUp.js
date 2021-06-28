@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -11,7 +10,6 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   let history = useHistory();
-  console.log(email, password, username);
 
   function SaveRegister(event) {
     event.preventDefault();
@@ -29,10 +27,9 @@ export default function SignUp() {
         history.push("/");
       });
       request.catch(() => {
-      setIsDisabled(false);
-      alert("Preencha todos os campos")
-      }
-      );
+        setIsDisabled(false);
+        alert("Não foi possível realizar o cadastro.");
+      });
     }
   }
   return (

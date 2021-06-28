@@ -26,7 +26,6 @@ export default function Home() {
     );
     request.then(() => {
       localStorage.removeItem("token");
-      console.log(localStorage);
       history.push("/");
     });
   }
@@ -36,7 +35,6 @@ export default function Home() {
     const request = axios.get("http://localhost:4000/home/registries", config);
     request.then((response) => {
       setRegistries(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -44,10 +42,7 @@ export default function Home() {
     const arrayValues = registries.map((e) => {
       return e.type === "expense" ? -e.value : e.value;
     });
-
-    console.log(arrayValues);
     const total = arrayValues.reduce((a, b) => a + b, 0);
-    console.log(total);
     return total.toFixed(2).replace(".", ",");
   }
 
